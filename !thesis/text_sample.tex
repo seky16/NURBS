@@ -1,0 +1,186 @@
+\chapter{První kapitola}
+\label{Prvni}
+
+\section{Singlet}
+\label{singlet}
+
+Řekněme, že potřebujeme singlet (jednoduchou čočku) F4 s~ohniskovou dálkou
+100\,mm. F4 znamená, že průměr apertury čočky je $f/4=100/4=25$\,mm. Začneme
+jednoduchým návrhem a~budeme jej postupně zdokonalovat.
+
+V~editoru ZEMAXu   zadejte jednoduchou čočku $r_1=100$\,mm, tloušťka 4\,mm,
+sklo BK7; $r_2=-100$\,mm. Povrch číslo 2 vložíte stisknutím klávesy Ins.
+Postupujte podle obrrázku obr.~\ref{cocka}.
+%
+%
+\begin{figure}[htb]
+\begin{center}
+   \includegraphics*[width=12cm,height=4cm,keepaspectratio]{obr/cockaedit}
+\end{center}
+\caption{Návrh čočky}
+\label{cocka}
+\end{figure}
+%
+%
+
+\subsection{Základní údaje o~zobrazení}
+\label{sing-zakludaje}
+
+Zobrazte si návrh (obr.~\ref{sing-layout}).
+%
+%
+\begin{figure}[htb]
+\begin{center}
+   \includegraphics*[width=8cm,height=8cm,keepaspectratio]{obr/layout}
+\end{center}
+\caption{Pohled na čočku}
+\label{sing-layout}
+\end{figure}
+%
+%
+Tloušťka povrchu OBJ je Infinity což znamená, že předmět se nachází v~nekonečnu
+před čočkou. Tloušťka povrchu 2 je 100 což znamená, že obrazová rovina IMG je
+100\,mm za povrchem. Z~obrázku \ref{sing-layout} vidíme, že ohnisko je před
+obrazovou rovinou. Efektivní ohnisková dálka této čočky je 97\,mm jak lze
+zjistit v~\uv{status baru} programu ZEMAX.
+
+Zakresleme si do grafu poněkud více paprsků. V~menu Settings můžeme nastavit
+parametry grafu.
+
+
+\subsubsection{Spot diagram}
+\label{sing-spotsub}
+
+Zobrazme si teď obraz našeho bodu v~nekonečnu před čočkou. Z~obrázku je vidět,
+že průměr bodu je přibližně 2{,}0\,mm.
+%
+%
+
+Ukázali jsme si několik základních typů grafů, které ukazují podobné údaje
+různými cestami. Z~celkového pohledu jsme zjistili, že obraz se vytváří před
+obrazovou rovinou kterou jsme zvolili. To nám potvrdil i~průběh podélné
+otvorové vady, který nám současně řekl, že vzdálenost ohniska je přibližně
+4\,mm.
+
+Ze spot diagramu jsme zjistili, že bod v~nekonečnu se zobrazil do kroužku
+o~průměru 2\,mm, stejný údaj jsme mohli získat také z~průběhu (příčné) otvorové
+vady.
+
+Ze sklonu průběhu otvorové vady v~počátku však můžeme vyčíst také to, že obraz
+bodu je defokusován.
+
+\subsection{Optimalizace zobrazení}
+\label{sing-optimalizace}
+
+Základní údaje o~čočce jsme již získali. Teď se pokusíme jich využít pro
+získání co nejlepšího obrazu.
+
+Pohlédneme-li na průběh otvorové vady pro oba předchozí způsoby určení polohy
+obrazové roviny, mohlo by nás napadnout řešení optimalizace zobrazení. Viděli
+jsme, že pro polohu obrazové roviny určenou z~paraxiálního paprsku byl sklon
+průběhu otvorové vady v~počátku nulový a~vada neustále rostla. Ve druhém
+případě byl sklon závislosti v~počátku záporný, vada nejprve klesala a~potom
+rostla (pro určitý poloměr paprsku ve vstupní pupile byla dokonce nulová!). Co
+kdybychom dali obrazovou rovinu někde mezi tyto dvě polohy. Obraz by byl sice
+rozostřený, ale průměr kroužku by mohl být menší.
+
+Optimální volba polohy obrazové roviny by byla v~nejužším místě svazku paprsků
+(sedle).
+
+Pohlédneme-li na průběh otvorové vady pro oba předchozí způsoby určení polohy
+obrazové roviny, mohlo by nás napadnout řešení optimalizace zobrazení. Viděli
+jsme, že pro polohu obrazové roviny určenou z~paraxiálního paprsku byl sklon
+průběhu otvorové vady v~počátku nulový a~vada neustále rostla. Ve druhém
+případě byl sklon závislosti v~počátku záporný, vada nejprve klesala a~potom
+rostla (pro určitý poloměr paprsku ve vstupní pupile byla dokonce nulová!). Co
+kdybychom dali obrazovou rovinu někde mezi tyto dvě polohy. Obraz by byl sice
+rozostřený, ale průměr kroužku by mohl být menší.
+
+Optimální volba polohy obrazové roviny by byla v~nejužším místě svazku paprsků
+(sedle).
+
+\section{Singlet2}
+\label{singlet2}
+
+Řekněme, že potřebujeme singlet (jednoduchou čočku) F4 s~ohniskovou dálkou
+100\,mm. F4 znamená, že průměr apertury čočky je $f/4=100/4=25$\,mm. Začneme
+jednoduchým návrhem a~budeme jej postupně zdokonalovat.
+
+V~editoru ZEMAXu   zadejte jednoduchou čočku $r_1=100$\,mm, tloušťka 4\,mm,
+sklo BK7; $r_2=-100$\,mm. Povrch číslo 2 vložíte stisknutím klávesy Ins.
+Postupujte podle obrázku obr.~\ref{cocka}.
+%
+%
+\begin{figure}[htb]
+\begin{center}
+   \includegraphics*[width=12cm,height=4cm,keepaspectratio]{obr/cockaedit}
+\end{center}
+\caption{Návrh čočky}
+\label{cocka2}
+\end{figure}
+%
+%
+
+\subsection{Základní údaje o~zobrazení}
+\label{sing-zakludaje2}
+
+Zobrazte si návrh (obr.~\ref{sing-layout2}).
+%
+%
+\begin{figure}[htb]
+\begin{center}
+   \includegraphics*[width=8cm,height=8cm,keepaspectratio]{obr/layout}
+\end{center}
+\caption{Pohled na čočku}
+\label{sing-layout2}
+\end{figure}
+%
+%
+Tloušťka povrchu OBJ je Infinity což znamená, že předmět se nachází v~nekonečnu
+před čočkou. Tloušťka povrchu 2 je 100 což znamená, že obrazová rovina IMG je
+100\,mm za povrchem. Z~obrázku \ref{sing-layout2} vidíme, že ohnisko je před
+obrazovou rovinou. Efektivní ohnisková dálka této čočky je 97\,mm jak lze
+zjistit v~\uv{status baru} programu ZEMAX.
+
+Zakresleme si do grafu poněkud více paprsků. V~menu Settings můžeme nastavit
+parametry grafu.
+
+
+\subsubsection{Spot diagram}
+\label{sing-spotsub2}
+
+Zobrazme si teď obraz našeho bodu v~nekonečnu před čočkou. Z~obrázku je vidět,
+že průměr bodu je přibližně 2{,}0\,mm.
+%
+%
+
+Ukázali jsme si několik základních typů grafů, které ukazují podobné údaje
+různými cestami. Z~celkového pohledu jsme zjistili, že obraz se vytváří před
+obrazovou rovinou kterou jsme zvolili. To nám potvrdil i~průběh podélné
+otvorové vady, který nám současně řekl, že vzdálenost ohniska je přibližně
+4\,mm.
+
+Ze spot diagramu jsme zjistili, že bod v~nekonečnu se zobrazil do kroužku
+o~průměru 2\,mm, stejný údaj jsme mohli získat také z~průběhu (příčné) otvorové
+vady.
+
+Ze sklonu průběhu otvorové vady v~počátku však můžeme vyčíst také to, že obraz
+bodu je defokusován.
+
+\subsection{Optimalizace zobrazení}
+\label{sing-optimalizace2}
+
+Základní údaje o~čočce jsme již získali. Teď se pokusíme jich využít pro
+získání co nejlepšího obrazu.
+
+Pohlédneme-li na průběh otvorové vady pro oba předchozí způsoby určení polohy
+obrazové roviny, mohlo by nás napadnout řešení optimalizace zobrazení. Viděli
+jsme, že pro polohu obrazové roviny určenou z~paraxiálního paprsku byl sklon
+průběhu otvorové vady v~počátku nulový a~vada neustále rostla. Ve druhém
+případě byl sklon závislosti v~počátku záporný, vada nejprve klesala a~potom
+rostla (pro určitý poloměr paprsku ve vstupní pupile byla dokonce nulová!). Co
+kdybychom dali obrazovou rovinu někde mezi tyto dvě polohy. Obraz by byl sice
+rozostřený, ale průměr kroužku by mohl být menší.
+
+Optimální volba polohy obrazové roviny by byla v~nejužším místě svazku paprsků
+(sedle).

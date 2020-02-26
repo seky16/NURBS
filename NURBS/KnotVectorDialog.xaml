@@ -1,0 +1,27 @@
+﻿<Window x:Class="NURBS.KnotVectorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NURBS"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Edit knot vector"
+        Height="300" Width="300"
+        Icon="NURBS.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Orientation="Horizontal" Margin="3">
+            <Button MinWidth="80" Margin="3,3,3,3" IsDefault="True" Click="OK_Click">OK</Button>
+            <Button MinWidth="80" Margin="3,3,3,3" Click="Reset_Click">Reset</Button>
+            <Button MinWidth="80" Margin="3,3,3,3" IsCancel="True">Cancel</Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto">
+            <Grid Name="Grd">
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

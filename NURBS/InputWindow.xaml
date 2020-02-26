@@ -1,0 +1,92 @@
+﻿<Window x:Class="NURBS.InputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NURBS"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="NURBS"
+        Height="550" Width="750"
+        Icon="NURBS.ico">
+
+    <DockPanel>
+        <Border BorderThickness="10" BorderBrush="Gray" Width="150" DockPanel.Dock="Left" Background="Gray">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="47" />
+                </Grid.RowDefinitions>
+                <Grid VerticalAlignment="Top" DockPanel.Dock="Top">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <WrapPanel Orientation="Vertical" Grid.Row="0">
+                        <TextBlock Height="0" Width="130"></TextBlock>
+                        <Button Name="ButErase" Click="ButErase_OnClick">Clear control points</Button>
+                        <TextBlock Height="10"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Width="65">Angle:</TextBlock>
+                            <xctk:IntegerUpDown
+                            Name="UpDownAngle"
+                            Minimum="0"
+                            Maximum="360"
+                            ClipValueToMinMax="True"
+                            DefaultValue="360"
+                            Text="360"
+                            Width="65" />
+                        </StackPanel>
+                        <TextBlock Height="10"></TextBlock>
+                        <Button Name="ButRotate" Click="ButRotate_OnClick">Rotate</Button>
+                        <TextBlock Height="10"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Width="65">Degree:</TextBlock>
+                            <TextBox Name="TbDegree"
+                                     Text="0"
+                                     Width="65"
+                                     TextChanged="TbDegree_OnTextChanged"
+                                     PreviewTextInput="TbDegree_OnPreviewTextInput"/>
+                        </StackPanel>
+                        <TextBlock Height="10"></TextBlock>
+                        <TextBlock>Knot vector:</TextBlock>
+                        <ScrollViewer
+                            VerticalScrollBarVisibility="Auto"
+                            HorizontalScrollBarVisibility="Auto">
+                            <TextBox
+                                Name="TbKnotVector"
+                                Text="0"
+                                IsReadOnly="True"
+                                IsReadOnlyCaretVisible="False"/>
+                        </ScrollViewer>
+                        <TextBlock Height="10"></TextBlock>
+                        <Button Name="KnotVectorEdit" Click="KnotVectorEdit_OnClick">Edit knot vector</Button>
+                        <TextBlock Height="10"></TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Width="65">Axis x:</TextBlock>
+                            <TextBlock Width="65" Name="TextBlockAxis">100</TextBlock>
+                        </StackPanel>
+                        <TextBlock Height="10"></TextBlock>
+                    </WrapPanel>
+                    <ScrollViewer Grid.Row="1"
+                        VerticalScrollBarVisibility="Auto"
+                        HorizontalScrollBarVisibility="Auto">
+                        <DataGrid Name="DataGridPoints"
+                                  AutoGeneratingColumn="DataGridPoints_OnAutoGeneratingColumn"
+                                  CellEditEnding="DataGridPoints_OnCellEditEnding"
+                                  CurrentCellChanged="DataGridPoints_OnCurrentCellChanged"/>
+                    </ScrollViewer>
+                </Grid>
+                <Image Source="{StaticResource AxesImage}" Grid.Row="2" HorizontalAlignment="Left"/>
+                <Button Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Top" MaxHeight="20" Width="50" Name="BtnExport" Click="BtnExport_OnClick">Export</Button>
+                <Button Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom"  MaxHeight="20" Width="50" Name="BtnHelp" Click="BtnHelp_OnClick">Help</Button>
+            </Grid>
+        </Border>
+        <Border BorderThickness="2" BorderBrush="Gray">
+            <local:InputCanvas x:Name="DCanvas" IsHitTestVisible="True"/>
+        </Border>
+    </DockPanel>
+</Window>

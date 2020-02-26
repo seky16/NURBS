@@ -1,0 +1,10 @@
+\chapter*{Úvod}
+
+\addcontentsline{toc}{chapter}{Úvod}
+\markboth{ÚVOD}{ÚVOD}
+V 60. letech minulého století se s postupným technologickým rozvojem zrodila disciplína zvaná počítačová grafika. Především při návrzích letadel, automobilů a lodí vznikla potřeba navrhovat oblé tvary, a tedy i nutnost přesné matematické reprezentace těchto křivek a ploch. Průkopníky rozvoje v této oblasti byli například Pierre Bézier, Paul de Casteljau, Carl de~Boor, Garrett Birkhoff nebo James Ferguson. Postupně vzniká obor s~názvem Computer-Aided Design neboli CAD.
+%todo: citace (wiki, martisek)
+
+Nejobecnější formou křivek jsou tzv. NURBS (Non-Uniform Rational B-Spline) křivky, používané nejen v technické praxi, ale také v designu, filmu, sochařství nebo například při modelování objektů ve virtuální realitě. NURBS se staly de facto standardem reprezentace křivek a ploch v počítačové grafice. Mezi jejich výhody patří hlavně rychlý a numericky stabilní výpočet, lokální kontrolovatelnost (při změně některého parametru dochází pouze k lokální změně křivky), invariance vůči transformacím, možnost konstrukce kuželoseček (především kružnicových oblouků) a různé způsoby ovládání křivky (řídící body, uzlový vektor, váhy).
+
+Tato práce se zabývá rotačními NURBS plochami, což jsou plochy vzniklé rotací dané vstupní křivky kolem osy rotace. Takto můžeme vytvářet například kulovou plochu nebo anuloid. První kapitola se věnuje teoretickým poznatkům potřebných při vytváření obecných NURBS křivek a ploch. Nejprve jsou v části \ref{cast21} popsány afinní a projektivní prostory a zobrazení na nich. V části \ref{cast22} je uvedena definice B-spline křivek a ploch, které jsou dále v části \ref{cast23} rozšířené pomocí homogenních souřadnic na NURBS křivky a plochy. V~části \ref{cast24} jsou shrnuty vlastnosti B-spline, resp. NURBS bázových funkcí, křivek a ploch. Druhá kapitola je věnována odvození NURBS reprezentace kružnicových oblouků (část \ref{odvozeni}) a~popisu rotačních NURBS ploch i s příklady (část \ref{revSurf}). Poslední kapitola popisuje důležité algoritmy použité v aplikaci \texttt{NURBS.exe}, která je součástí této práce.

@@ -1,0 +1,1070 @@
+\chapter{Základní teoretické pojmy}
+
+V následující kapitole si uvedeme definice a~vlastnosti struktur použitých v~této práci. V~první části zavedeme afinní a~projektivní prostory a~zobrazení na nich. Poté v~částech~\ref{cast22} a~\ref{cast23} popíšeme matematický aparát pro B-spline křivky a~jejich racionální rozšíření NURBS.
+
+\section{Afinní a~projektivní prostory}\label{cast21}
+Computer Aided Design (CAD) a~obecně počítačová grafika využívá matematických principů afinních a~projektivních prostorů. Následující definice a~další informace týkající se prostorů lze nalézt např. v~\cite{Cadek2003,Horak2009,Janyska2018,Martisek2002,Martisekc2005}.
+
+\begin{definice}
+	Nechť $A_n$ je neprázdná množina, nechť $V_n$ je lineární prostor dimenze $n$, $n\in\mathbb{N}_0$ nad tělesem reálných čísel $\mathbb{R}$ a~dále nechť $\varphi: A_n\times A_n\to V_n$ je zobrazení takové, že platí:
+	\begin{enumerate}[label=\alph*)]
+		\item $\forall A\in A_n; \forall\mathbf{x}\in V_n$: $\exists!B\in A_n: \varphi\left(A,B\right)=\mathbf{x}$,
+		\item $\forall A,B,C\in A_n: \varphi\left(A,C\right)\leq\varphi\left(A,B\right)+\varphi\left(B,C\right)$.
+	\end{enumerate}
+	Pak množinu $A_n$ nazýváme \emph{afinním prostorem}. Lineární prostor $V_n$ nazýváme \emph{zaměření prostoru $A_n$}, dimenzi prostoru $V_n$ nazýváme \emph{dimenzí $A_n$}. Prvky $A\in A_n$ nazýváme \emph{body} afinního prostoru. Uspořádanou dvojici $\left(A,B\right)$ nazýváme \emph{umístěním vektoru $\mathbf{x}$} v~prostoru $A_n$. Místo $\mathbf{x}=\varphi\left(A,B\right)$ obvykle píšeme $\mathbf{x}=B-A$ nebo $\mathbf{x}=\overrightarrow{AB}$.
+\end{definice}
+
+\begin{definice}
+	Nechť $A,B,C$ jsou body na téže přímce, pak číslo
+	\begin{equation}
+		\lambda=\left(A,B,C\right)=\frac{\overrightarrow{AB}}{\overrightarrow{AC}},\quad\lambda\neq0
+	\end{equation}
+	nazýváme \emph{dělící poměr} bodů $A,B,C$.
+\end{definice}
+
+\begin{definice}
+	Nechť $\varphi:A_n\to A_n'$ je zobrazení afinního prostoru $A_n$ do afinního prostoru $A_n'$, přímky $p\subset A_n$, $p'\subset A_n'$  takové, že $\varphi\left(p\right)=p'$. Dále nechť $A,B,C\in p$ jsou tři různé body přímky $p$. Zobrazení $\varphi$ nazýváme \emph{afinní}, jestliže $\left(A,B,C\right)=\left(\varphi\left(A\right),\varphi\left(B\right),\varphi\left(C\right)\right)$, tj. zobrazení zachovává dělící poměr.
+\end{definice}
+
+\begin{definice}\sloppy
+	Nechť $E_n$ je afinní prostor, jehož zaměřením je unitární prostor $V_n$ uspořádaných $n$-tic reálných čísel $\mathbf{u}=\left(u_1,\dots,u_n\right)$, $\left\lbrace e_1,\dots,e_n\right\rbrace$ libovolná báze $V_n$ a~$O\in E_n$. Afinní prostor nazýváme \emph{euklidovským prostorem} a~uspořádanou $\left(n+1\right)$-tici $\left\langle O,e_1,\dots,e_n\right\rangle$ \emph{kartézskou souřadnou soustavou}. Jestliže $X-O=x_1\mathbf{e}_1+\dots+x_n\mathbf{e}_n$, píšeme obvykle $X=\left[x_1,\dots,x_n\right]$ a~uspořádanou $n$-tici $\left[x_1,\dots,x_n\right]$ nazýváme \emph{kartézskými souřadnicemi} bodu $X$.
+\end{definice}
+
+\begin{definice}\label{homo}
+	Nechť $V_{n+1}$ je lineární prostor dimenze $n+1$ nad tělesem reálných čísel $\mathbb{R}$. Množinu $P_n$ všech jednodimenzionálních podprostorů prostoru $V_{n+1}$ nazýváme \emph{projektivním prostorem} dimenze $n$. Každý nenulový vektor $\mathbf{x}\in V_{n+1}$ nazýváme \emph{aritmetickým bodem} projektivního prostoru. Množinu $\widebar{X}=\left\lbrace \mathbf{g}\in P_n;\mathbf{g}=k\mathbf{x};k\neq0 \right\rbrace$ nazýváme \emph{geometrickým bodem} projektivního prostoru. Složky vektoru $\mathbf{g}=\left(x_1,\dots,x_{n+1}\right)$, $x_i\in\mathbb{R}$ nazýváme \emph{homogenními souřadnicemi }bodu $\widebar{X}$, píšeme $\widebar{X}=\left[x_1,\dots,x_{n+1}\right]$.
+\end{definice}
+
+\begin{definice}
+	Nechť $A=\left[a_1,a_2\right]$, $B=\left[b_1,b_2\right]$, $C=\left[c_1,c_2\right]$, $D=\left[d_1,d_2\right]$ jsou čtyři různé body na téže přímce. Číslo
+	\begin{equation}
+		d=\left(A,B,C,D\right)=\frac{\begin{vmatrix} a_1 & a_2 \\ c_1 & c_2 \end{vmatrix}\cdot\begin{vmatrix} b_1 & b_2 \\ d_1 & d_2 \end{vmatrix}}{\begin{vmatrix} b_1 & b_2 \\ c_1 & c_2 \end{vmatrix}\cdot\begin{vmatrix} a_1 & a_2 \\ d_1 & d_2 \end{vmatrix}}
+	\end{equation}
+	nazýváme \emph{dvojpoměr} bodů $A,B,C,D$.
+\end{definice}
+
+\begin{definice}
+	Nechť $\varphi:P_n\to P_n'$ je zobrazení projektivního prostoru $P_n$ do projektivního prostoru $P_n'$, nechť $p\subset P_n$, $p'\subset P_n'$ jsou takové přímky, že $\varphi\left(p\right)=p'$. Dále nechť $A,B,C,D\in p$ jsou čtyři různé body přímky $p$. Zobrazení $\varphi$ nazýváme \emph{projektivní}, jestliže \linebreak $\left(A,B,C,D\right)=\left(\varphi\left(A\right),\varphi\left(B\right),\varphi\left(C\right),\varphi\left(D\right)\right)$, tj. zobrazení zachovává dvojpoměr.
+\end{definice}
+
+\begin{definice}
+	Nechť $V_n$ je vektorový prostor. Lineární zobrazení $\varphi: V_n\to V-n$ nazýváme \emph{lineární transformace (endomorfismus)} vektorového prostoru $V_n$.
+\end{definice}
+
+\begin{definice}
+	Nechť $\varphi$ je lineární transformace vektorového prostoru $V_n$. Vektorový podprostor $U\subseteq V$ se nazývá \emph{invariantní} vzhledem k lineární transformaci $\varphi$, je-li $\varphi\left(U\right)\subseteq U$ tj. pro libovolný vektor $\mathbf{u}\in U$ je $\varphi\left(\mathbf{u}\right)\in U$.
+\end{definice}
+
+\begin{definice}
+	Každé projektivní zobrazení bodu $\mathbf{X}=\left[x_1,\dots,x_n\right]$ na bod $\mathbf{X'}\left[x'_1,\dots,x'_m\right]$ lze popsat soustavou rovnic
+	\begin{equation}
+		\begin{pmatrix}
+		x'_1 \\ 
+		\vdots \\ 
+		x'_m
+		\end{pmatrix}
+		=
+		\begin{pmatrix}
+		a_{11} & \cdots & a_{1n} \\ 
+		\vdots & \ddots & \vdots \\ 
+		a_{m1} & \cdots & a_{mn} 
+		\end{pmatrix}
+		\begin{pmatrix}
+		x_1 \\ 
+		\vdots \\ 
+		x_n
+		\end{pmatrix},
+	\end{equation}
+	nebo maticově ${\mathbf{X}'}^{T}=\mathbf{A}\cdot\mathbf{X}^T$, kde $\mathbf{A}$ je \emph{matice určující zobrazení}.
+\end{definice}
+
+\begin{poznamka}
+	V práci budeme nejčastěji používat matici rotace v projektivním prostoru kolem osy $y$ o úhel $\alpha$, která je ve tvaru
+	\begin{equation}\label{rotace}
+		\mathbf{R}_y=
+		\begin{pmatrix}
+		\cos\alpha & 0 & \sin\alpha & 0 \\ 
+		0 & 1 & 0 & 0 \\ 
+		-\sin\alpha & 0 & \cos\alpha & 0 \\ 
+		0 & 0 & 0 & 1
+		\end{pmatrix}.
+	\end{equation}
+\end{poznamka}
+
+\section{B-spline křivky a~plochy}\label{cast22}
+
+B-spline křivky jsou zobecněním Bézierových křivek, jejichž nevýhodou je potřeba velkého stupně křivky pro zobrazení složitějších tvarů a~špatná lokální kontrolovatelnost (změna jednoho řídícího bodu změní tvar celé křivky). B-spline odstraňují tyto nedostatky, neboť jsou po částech polynomiální. Definiční obor křivky je rozdělen pomocí tzv. uzlů na podintervaly a~na každém takovém intervalu je definovaná příslušná bázová funkce. 
+% Definujme si tedy B-spline křivky, jak je uvádí \cite{Pieglc1997} nebo \cite{Shenec19972014}.
+Podrobně zpracovanou teorii týkající se B-spline nalezneme například v~\cite{Pieglc1997,Shenec19972014}.
+
+\begin{definice}
+	Nechť $U$ je neklesající posloupnost $\left(m+1\right)$ reálných čísel $u_0\leq u_1\leq \dots \leq u_m$. Potom čísla $u_i$, kde $i=0,\dots,m$, nazýváme \emph{uzly}, množinu $U=\left\{u_0,\dots,u_m\right\}$ nazýváme \emph{uzlový vektor} a~interval $\left\langle u_i,u_{i+1} \right)$ nazýváme \emph{$i$-tá uzlová rozteč}.
+\end{definice}
+
+\begin{poznamka}
+	Každý uzlový vektor lze jednoduše převést na takový uzlový vektor, kde $u_0=0$ a~$u_m=1$.
+\end{poznamka}
+
+\begin{definice}
+	Na daném uzlovém vektoru $U=\left\{u_0,\dots,u_m\right\}$ jsou pro $i=0,\dots,m-p-1$ \emph{B-spline bázové funkce} stupně $p=0,\dots,m-1$ definovány  pomocí tzv. \emph{Cox-de Boorovy rekurentní formule}
+	\begin{subequations}\label{coxdeboor}
+		\begin{align}
+			N_{i,0}\left(u\right)&=
+			\begin{cases}
+				1 & \text{pro $u\in\left\langle u_i,u_{i+1} \right)$},\\
+				0 & \text{jinak},
+			\end{cases}\label{coxdeboorA}\\
+			N_{i,p}\left(u\right)&=\frac{u-u_i}{u_{i+p}-u_i}N_{i,p-1}\left(u\right)+\frac{u_{i+p+1}-u}{u_{i+p+1}-u_{i+1}}N_{i+1,p-1}\left(u\right).\label{coxdeboorB}
+		\end{align}
+	\end{subequations}
+\end{definice}
+
+\begin{poznamka}
+	V rovnici \eqref{coxdeboorB} nám může vyjít $\frac{0}{0}$, proto definujeme $N_{i,p}\left(u\right)=\frac{0}{0}=0$.
+\end{poznamka}
+
+\begin{priklad}
+	Nechť $U=\left\lbrace 0,0,0,\dfrac{1}{4},\dfrac{1}{2},\dfrac{3}{4},\dfrac{3}{4},1,1,1 \right\rbrace$ je uzlový vektor. Vypočítáme B-spline bázové funkce stupně $0,1,2$. (Pro přehlednost budu zapisovat $N_{i,p}\left(u\right)$ jako $N_{i,p}$.)
+	
+	$\mathbf{p=0}:$
+	Z rovnice \eqref{coxdeboorA} vyjádříme bázové funkce stupně 0.
+	\begin{align*}
+		N_{0,0}&=N_{1,0}=0,\\
+	 	N_{2,0}&=
+	 	\begin{cases}
+	 		1 & \text{pro $u\in\left\langle 0,1/4 \right)$},\\
+	 		0 & \text{jinak},
+	 	\end{cases}\\
+	 	N_{3,0}&=
+	 	\begin{cases}
+	 	1 & \text{pro $u\in\left\langle 1/4,1/2 \right)$},\\
+	 	0 & \text{jinak},
+	 	\end{cases}\\
+	 	N_{4,0}&=
+	 	\begin{cases}
+	 	1 & \text{pro $u\in\left\langle 1/2,3/4 \right)$},\\
+	 	0 & \text{jinak},
+	 	\end{cases}\\
+	 	N_{5,0}&=0, \\
+	 	N_{6,0}&=
+	 	\begin{cases}
+	 	1 & \text{pro $u\in\left\langle 3/4,1 \right)$},\\
+	 	0 & \text{jinak},
+	 	\end{cases}\\
+	 	N_{7,0}&=N_{8,0}=0.
+	\end{align*}
+	Všechny nenulové bázové funkce stupně 0 můžeme vidět na obr.~\ref{graf0}.
+	\begin{figure}[!h]
+		\begin{center}
+			\includegraphics*[]{obr/graf0}
+		\end{center}
+		\caption{\sloppy Bázové funkce stupně 0 pro $U=\left\lbrace 0,0,0,1/4,1/2,3/4,3/4,1,1,1\right\rbrace $}
+		\label{graf0}
+	\end{figure}
+
+	$\mathbf{p=1}:$
+	Z rovnice \eqref{coxdeboor} vyjádříme bázové funkce stupně 1:
+	\begin{align*}
+		N_{0,1}&=\frac{u-0}{0-0}N_{0,0}+\frac{0-u}{0-0}N_{1,0}=0,\\
+		N_{1,1}&=\frac{u-0}{0-0}N_{1,0}+\frac{0,25-u}{0,25-0}N_{2,0}=
+		\begin{cases}
+			1-4u & \text{pro $u\in\left\langle 0,1/4 \right)$,} \\
+			0 & \text{jinak,}
+		\end{cases}\\
+		N_{2,1}&=\frac{u-0}{0,25-0}N_{2,0}+\frac{0,5-u}{0,5-0,25}N_{3,0}=
+		\begin{cases}
+			4u & \text{pro $u\in\left\langle 0,1/4 \right)$,}\\
+			2-4u & \text{pro $u\in\left\langle 1/4,1/2 \right)$,}\\
+			0 & \text{jinak,}
+		\end{cases}\\
+		N_{3,1}&=\frac{u-0,25}{0,5-0,25}N_{3,0}+\frac{0,75-u}{0,75-0,5}N_{4,0}=
+		\begin{cases}
+			4u-1 & \text{pro $u\in\left\langle 1/4,1/2 \right)$,}\\
+			3-4u & \text{pro $u\in\left\langle 1/2,3/4 \right)$,}\\
+			0 & \text{jinak,}
+		\end{cases}\\
+		N_{4,1}&=\frac{u-0,5}{0,75-0,5}N_{4,0}+\frac{0,75-u}{0,75-0,75}N_{5,0}=
+		\begin{cases}
+		4u-2 & \text{pro $u\in\left\langle 1/2,3/4 \right)$,}\\
+		0 & \text{jinak,}
+		\end{cases}\\
+		N_{5,1}&=\frac{u-0,75}{0,75-0,75}N_{5,0}+\frac{1-u}{1-0,75}N_{6,0}=
+		\begin{cases}
+		4-4u & \text{pro $u\in\left\langle 3/4,1 \right)$,}\\
+		0 & \text{jinak,}
+		\end{cases}\\
+		N_{6,1}&=\frac{u-0,75}{1-0,75}N_{6,0}+\frac{1-u}{1-1}N_{7,0}=
+		\begin{cases}
+		4u-3 & \text{pro $u\in\left\langle 3/4,1 \right)$,}\\
+		0 & \text{jinak,}
+		\end{cases}\\
+		N_{7,1}&=\frac{u-1}{1-1}N_{7,0}+\frac{1-u}{1-1}N_{8,0}=0.
+	\end{align*}
+	Všechny nenulové bázové funkce stupně 1 jsou zobrazeny na obr.~\ref{graf1}.
+	\begin{figure}[!h]
+		\begin{center}
+			\includegraphics*[]{obr/graf1}
+		\end{center}
+		\caption{Bázové funkce stupně 1 pro $U=\left\lbrace 0,0,0,1/4,1/2,3/4,3/4,1,1,1\right\rbrace $}
+		\label{graf1}
+	\end{figure}
+
+	$\mathbf{p=2}:$
+	Nakonec vyjádříme bázové funkce stupně 2:
+	\begin{align*}
+	N_{0,2}&=\frac{u-0}   {0   -0}   N_{0,1}+\frac{0,25-u}{0,25-0}   N_{1,1}=
+	\begin{cases}
+		\left(1-4u\right)^2 & \text{pro $u\in\left\langle 0,1/4 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{1,2}&=\frac{u-0}   {0,25-0}   N_{1,1}+\frac{0,5-u} {0,5 -0}   N_{2,1}=
+	\begin{cases}
+		-24u^2+8u & \text{pro $u\in\left\langle 0,1/4 \right)$,}\\
+		8u^2-8u+2 & \text{pro $u\in\left\langle 1/4,1/2 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{2,2}&=\frac{u-0}   {0,5 -0}   N_{2,1}+\frac{0,75-u}{0,75-0,25}N_{3,1}=
+	\begin{cases}
+		8u^2 & \text{pro $u\in\left\langle 0,1/4 \right)$,}\\
+		-16u^2+12u-1,5 & \text{pro $u\in\left\langle 1/4,1/2 \right)$,}\\
+		8u^2-12u+4,5 & \text{pro $u\in\left\langle 1/2,3/4 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{3,2}&=\frac{u-0,25}{0,75-0,25}N_{3,1}+\frac{0,75-u}{0,75-0,5} N_{4,1}=
+	\begin{cases}
+		8u^2-4u+0,5 & \text{pro $u\in\left\langle 1/4,1/2 \right)$,}\\
+		-24u^2+28u-7,5 & \text{pro $u\in\left\langle 1/2,3/4 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{4,2}&=\frac{u-0,5} {0,75-0,5} N_{4,1}+\frac{1-u}   {1   -0,75}N_{5,1}=
+	\begin{cases}
+		4\left(2u-1\right)^2 & \text{pro $u\in\left\langle 1/2,3/4 \right)$,}\\
+		16\left(u-1\right)^2 & \text{pro $u\in\left\langle 3/4,1 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{5,2}&=\frac{u-0,75}{1   -0,75}N_{5,1}+\frac{1-u}   {1   -0,75}N_{6,1}=
+	\begin{cases}
+		-32u^2+56u-24 & \text{pro $u\in\left\langle 3/4,1 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}\\
+	N_{6,2}&=\frac{u-0,75}{1   -0,75}N_{6,1}+\frac{1-u}   {1   -1}   N_{7,1}=
+	\begin{cases}
+		\left(4u-3\right)^2 & \text{pro $u\in\left\langle 3/4,1 \right)$,}\\
+		0 & \text{jinak,}
+	\end{cases}
+	\end{align*}
+	Všechny nenulové bázové funkce stupně 2 můžeme vidět na obr.~\ref{graf2}.
+	\begin{figure}[!h]
+		\begin{center}
+			\includegraphics*[]{obr/graf2}
+		\end{center}
+		\caption{Bázové funkce stupně 2 pro $U=\left\lbrace 0,0,0,1/4,1/2,3/4,3/4,1,1,1\right\rbrace $}
+		\label{graf2}
+	\end{figure}
+\end{priklad}
+
+\begin{definice}
+	Pro daný uzlový vektor $U=\left\{u_0,\dots,u_m\right\}$ je \emph{B-spline křivka stupně} $p$ definovaná
+	\begin{equation}
+		\mathbf{C}\left(u\right)=\sum _{i=0}^{n}{N}_{i,p}\left(u\right)\mathbf{P}_i, \quad u \in \left\langle u_0,u_m \right\rangle,
+	\end{equation}
+	kde ${N}_{i,p}$ jsou B-spline bázové funkce stupně $p$ a~$\mathbf{P}_i$ jsou \emph{řídící body}. Polygon tvořený řídícími body nazýváme \emph{řídící polygon}.
+\end{definice}
+
+%%todo: obr křivka+polygon
+%{\LARGE (obrázek)}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[scale=0.9]{obr/krivka2}
+	\end{center}
+	\caption[caption]{\centering B-spline křivka stupně 2 (modře) a její řídící polygon (černě)\linebreak pro $U=\left\lbrace 0,0,0,1/4,1/2,3/4,3/4,1,1,1\right\rbrace $}
+	\label{obrKrivka}
+\end{figure}
+
+\begin{definice}
+	Řekneme, že uzel má \emph{násobnost} $m$, pokud se v~uzlovém vektoru objeví \linebreak $m$-krát.
+\end{definice}
+
+\begin{definice}\label{tangents}
+	B-spline křivka se nazývá \emph{sevřená}, pokud má první a~poslední uzel násobnost $p+1$. Spojnice prvních a~posledních dvou řídících bodů jsou tečnami v~krajních bodech křivky, sevřená B-spline křivka  $\mathbf{C}\left(u\right)$ tedy prochází koncovými body řídícího polygonu a~platí $\mathbf{C}\left(u_0\right)=\mathbf{P}_0$ a~$\mathbf{C}\left(u_m\right)=\mathbf{P}_n$. Křivka se nazývá \emph{uzavřená} je-li prvních a~posledních $p$ řídících bodů shodných. V~ostatních případech se křivka nazývá \emph{otevřená}.
+\end{definice}
+
+\begin{poznamka}
+	Nadále se budeme zabývat výhradně sevřenými křivkami.
+\end{poznamka}
+
+\begin{definice}
+	Mějme uzlový vektor $U=\left\{u_0,\dots,u_m\right\}$. Je-li hodnota výrazu $u_{i+1}-u_i$ konstantní pro všechna $i=p,p+1,...,m-p-1$, označujeme uzlový vektor jako \emph{uniformní}, jinak hovoříme o \emph{neuniformním} uzlovém vektoru.
+\end{definice}
+
+\begin{definice}
+	B-spline plocha je definovaná nad sítí bodů $\mathbf{P}_{i,j}$, $i\in\left\langle0,m\right\rangle$, $j\in\left\langle 0,n\right\rangle$ se dvěma stupni $p,q$ a~dvěma uzlovými vektory $U=\left\lbrace u_0,\dots,u_h \right\rbrace,V=\left\lbrace v_0,\dots,u_k \right\rbrace$ takto
+	\begin{equation}
+		\mathbf{S}\left(u,v\right)=\sum _{i=0}^{m}\sum _{j=0}^{n}{N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)\mathbf{P}_{i,j}, \quad u \in \left\langle u_0,u_h \right\rangle,v \in \left\langle v_0,v_k \right\rangle.
+	\end{equation}
+\end{definice}
+
+%%todo: obr plocha
+%{\LARGE (obrázek)}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=8cm]{obr/plocha}
+	\end{center}
+	\caption{B-spline plocha \cite{Pieglc1997}}
+	\label{obrPlocha}
+\end{figure}
+
+\section{NURBS křivky a~plochy}\label{cast23}
+B-spline bázové funkce jsou polynomy, proto pomocí nich nelze přesně popsat některé křivky (např. kuželosečky), které ke svému vyjádření potřebují racionální lomené funkce \cite{Pieglc1997,Shenec19972014}. Z tohoto důvodu zavádíme tzv. NURBS (Non-Uniform Rational B-Splines -- neuniformní racionální B-spline) křivky. Ke každému bodu je přiřazena váha $w$, která určuje, jakou silou tento bod ovlivňuje tvar křivky. Pro práci s~váhami zavedeme homogenní souřadnice dle definice~\ref{homo}. Přejdeme tedy do projektivního prostoru a~bodu $\mathbf{P}=\left[x,y,z\right]$ přiřadíme bod $\mathbf{P}^w=\left[X,Y,Z,w\right]=\left[wx,wy,wz,w\right]$ pro $w\in\mathbb{R}$, $w>0$.
+
+\begin{poznamka}
+	Váhy bodů lze obecně uvažovat i záporné, viz \cite{Pieglc1997}, ale v práci se omezíme pouze na kladné hodnoty.
+\end{poznamka}
+
+%%todo: obr projekce
+%{\LARGE (obrázek - projekce?)}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/projekce}
+	\end{center}
+	\caption{Reprezentace bodu kartézské soustavy v homogenních souřadnicích}
+	\label{obrProjekce}
+\end{figure}
+
+%\begin{poznamka}
+%	Bod $\mathbf{P}=\left[x,y,z\right]$ má homogenní souřadnice $\mathbf{P}^w=\left[wx,wy,wz,w\right]$ pro $w\in\mathbb{R}$, $w>0$. Souřadnici $w$ nazýváme \emph{váhou} bodu $\mathbf{P}$.
+%\end{poznamka}
+
+\begin{definice}
+	Pro řídící body $\mathbf{P}_0,...,\mathbf{P}_n$, kterým jsou přiřazeny kladné váhy $\left\lbrace w_0,...,w_n \right\rbrace$, $w_i\in\mathbb{R}$ a~uzlový vektor $U=\left\lbrace u_0,...,u_m \right\rbrace$ je \emph{NURBS křivka stupně p} určena předpisem
+	\begin{equation}\label{nurbs}
+		\mathbf{C}^w\left(u\right)=\sum _{i=0}^{n}{N}_{i,p}\left(u\right)\mathbf{P}^w_i \implies \mathbf{C}\left(u\right)=\frac{\sum _{i=0}^{n}{N}_{i,p}\left(u\right)w_i\mathbf{P}_i}{\sum _{i=0}^{n}{N}_{i,p}\left(u\right)w_i},\quad u \in \left\langle u_0,u_m \right\rangle 
+	\end{equation}
+	kde ${N}_{i,p}$ jsou B-spline bázové funkce stupně $p$.
+\end{definice}
+
+%%todo: obr váha
+%{\LARGE (obrázek - vliv váhy)}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/vaha}
+	\end{center}
+	\caption{Vliv váhy na tvar křivky}
+	\label{obrVaha}
+\end{figure}
+
+\begin{veta}
+	Rovnici \eqref{nurbs} lze přepsat na tvar
+	\begin{equation}
+		\mathbf{C}\left(u\right)=\sum _{i=0}^{n}{R}_{i,p}\left(u\right)\mathbf{P}_i,\quad u \in \left\langle u_0,u_m \right\rangle
+	\end{equation}
+	kde ${R}_{i,p}\left( u \right)$ jsou tzv. \emph{racionální bázové funkce} tvaru
+	\begin{equation}\label{rational-basis}
+		{R}_{i,p}\left(u\right)=\frac{{N}_{i,p}\left(u\right)w_i}{\sum _{j=0}^{n}{N}_{j,p}\left(u\right)w_j}
+	\end{equation}
+\end{veta}
+
+\begin{definice}
+	\emph{NURBS plocha stupně $p$ ve směru $u$ a~stupně $q$ ve směru $v$} vyjádřená pomocí homogenních souřadnic je tvaru
+	\begin{equation}\label{nurbs-surface-homo}
+		\mathbf{S}^w\left(u,v\right)=\sum _{i=0}^{m}\sum _{j=0}^{n}{N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)\mathbf{P}^w_{i,j}, \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle
+	\end{equation}
+	a tedy
+	\begin{equation}\label{nurbs-surface}
+		\mathbf{S}\left(u,v\right)=\frac{\sum _{i=0}^{m}\sum _{j=0}^{n}{N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)w_{i,j}\mathbf{P}_{i,j}}{\sum _{i=0}^{m}\sum _{j=0}^{n}{N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)}, \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle.
+	\end{equation}
+	kde body $\mathbf{P}_{i,j}$, $i\in\left\langle0,m\right\rangle$, $j\in\left\langle 0,n\right\rangle$ tvoří dvojrozměrnou \emph{řídící síť}, kladná reálná čísla $w_{i,j}$ jsou váhy a~$N_{i,p}\left(u\right)$
+	a $N_{j,q}\left(v\right)$ jsou bázové funkce definované na uzlových vektorech $U=\left\lbrace u_0,\dots,u_h \right\rbrace $ a~$V=\left\lbrace v_0,\dots,v_k \right\rbrace $.
+\end{definice}
+
+\begin{veta}
+	Rovnici \eqref{nurbs-surface} lze přepsat na tvar
+	\begin{equation}
+	\mathbf{S}\left(u,v\right)=\sum _{i=0}^{m}\sum _{j=0}^{n}{R}_{i,p;j,q}\left(u,v\right)\mathbf{P}_{i,j}, \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle,
+	\end{equation}
+	kde ${R}_{i,p;j,q}\left( u \right)$ jsou tzv. \emph{racionální bázové funkce} tvaru
+	\begin{equation}\label{R_ij}
+	{R}_{i,p;j,q}\left(u,v\right)=\frac{{N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)w_{i,j}}{\sum _{a=0}^{m}\sum _{b=0}^{n}{N}_{a,p}\left(u\right){N}_{b,q}\left(v\right)w_{a,b}}, \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle.
+	\end{equation}
+\end{veta}
+
+%%todo: obr NURBS plocha ?
+%{\LARGE (obrázek?)}
+
+\section{Vlastnosti}\label{cast24}
+V této části si uvedeme některé důležité vlastnosti B-spline a~NURBS bázových funkcí, křivek a~ploch. Protože NURBS jsou zobecněním B-spline (pro $w_0=\dots=w_n=c$, $c\in\mathbb{R}$, $c>0$), sdílí většinu vlastností. Uvádím zde pouze některé důkazy, ostatní lze nalézt např.~v~\cite{Pieglc1997,Shenec19972014}.
+
+\subsection{Vlastnosti bázových funkcí}
+
+Následující vlastnosti platí jak pro B-spline bázové funkce $N_{i,p}\left(u\right)$ definované rovnicí \eqref{coxdeboor}, tak pro racionální bázové funkce $R_{i,p}\left(u\right)$ definované rovnicí \eqref{rational-basis}. Pro jednoduchost v~textu uvádím pouze $N_{i,p}\left(u\right)$.
+
+%\begin{veta}
+%	${N}_{i,p}\left(u\right)$ je lineární kombinací dvou bázových funkcí stupně $p-1$.
+%\end{veta}
+%
+%\begin{veta}
+%	${N}_{i,p}\left(u\right)$ je polynom stupně $p$.
+%\end{veta}
+
+\begin{veta}[Lokální podpora]\label{local-support}
+	Bázová funkce ${N}_{i,p}\left(u\right)$ je nenulová na intervalu $\left\langle u_i, u_{i+p+1}\right)$ a~nulová na intervalu $u\notin\left\langle u_i, u_{i+p+1}\right)$
+\end{veta}
+
+\begin{proof}
+	${N}_{i,1}\left(u\right)$ je lineární kombinací ${N}_{i,0}\left(u\right)$ a~${N}_{i+1,0}\left(u\right)$. Protože dle rovnice \eqref{coxdeboorA} je funkce ${N}_{i,0}\left(u\right)$ nenulová na intervalu $\left\langle u_i, u_{i+1}\right)$ a~funkce ${N}_{i+1,0}\left(u\right)$ je nenulová na intervalu $\left\langle u_{i+1}, u_{i+2}\right)$, tak ${N}_{i,1}\left(u\right)$ je nenulová na těchto dvou intervalech. Toto platí pro libovolné $p\geq0$.
+\end{proof}
+
+\begin{veta}[Nezápornost]
+	${N}_{i,p}\left(u\right)\geq 0$ pro všechna $i$, $p$ a~$u$.
+\end{veta}
+
+\begin{proof}
+	Zřejmé pro $p=0$ z rovnice \eqref{coxdeboorA}. Dále předpokládáme, že ${N}_{i,p-1}\left(u\right)\geq 0$ pro  $p\geq0$ a~libovolná, pevně zvolená $i$ a~$u$. Dle věty~\ref{local-support} platí ${N}_{i,p-1}\left(u\right)=0$ pro $u\notin\left\langle u_i, u_{i+p}\right)$. Pro $u\in\left\langle u_i, u_{i+p}\right)$ je zlomek $\dfrac{u-u_i}{u_{i+p}-u_i}$ nezáporný. Dle předpokladu je funkce ${N}_{i,p-1}\left(u\right)$ nezáporná, a~tedy první člen v \eqref{coxdeboorB} je nezáporný. Toto platí ekvivalentně i pro druhý člen a~tedy funkce ${N}_{i,p}\left(u\right)$ jsou nezáporné.
+\end{proof}
+
+\begin{veta}
+	Na libovolné uzlové rozteči $\left\langle u_j, u_{j+1}\right)$ je nejvýše $p+1$ bázových funkcí ${N}_{i,p}\left(u\right)$ nenulových. Konkrétně jde o funkce $N_{j-p,p},\dots,N_{j,p}$.
+\end{veta}
+
+\begin{veta}%[Rozdělení jedničky]
+	\label{partition-of-unity}
+	Pro libovolnou uzlovou rozteč $\left\langle u_i, u_{i+1}\right)$ platí $\sum_{j=i-p}^{i}N_{j,p}\left(u\right)=1$ pro všechna $u\in\left\langle u_i, u_{i+1}\right)$.
+\end{veta}
+
+%\begin{proof}
+%	Uvažujme $$\sum_{j=i-p}^{i}N_{j,p}\left(u\right)=\sum_{j=i-p}^{i}\frac{u-u_j}{u_{j+p}-u_j}N_{j,p-1}\left(u\right)+\sum_{j=i-p}^{i}\frac{u_{j+p+1}-u}{u_{j+p+1}-u_{j+1}}N_{j+1,p-1}\left(u\right).$$
+%	
+%\end{proof}
+
+\begin{veta}\label{multiple-knots}
+	Pro každý uzel násobnosti $k$ je počet nenulových bázových funkcí stupně $p$ nejvýše $p-k+1$.
+\end{veta}
+
+\begin{veta}
+	V uzlu násobnosti $k$ má bázová funkce $N_{i,p}\left(u\right)$ spojitost $C^{p-k}$.
+\end{veta}
+
+\subsection{Vlastnosti křivek}
+
+\begin{poznamka}
+	Pro každou b-spline křivku musí platit podmínka
+	\begin{equation}
+	m=n+p+1,
+	\end{equation}
+	kde $p$ je stupeň, $n+1$ počet řídících bodů a~$m+1$ počet uzlů.
+\end{poznamka}
+
+%\begin{veta}\label{EndPoints}
+%	Sevřená B-spline křivka $\mathbf{C}\left(u\right)$ prochází koncovými body řídícího polygonu a~platí $\mathbf{C}\left(u_0\right)=\mathbf{P}_0$ a~$\mathbf{C}\left(u_m\right)=\mathbf{P}_n$.
+%\end{veta}
+
+%\begin{veta}[Afinní invariance]
+%	Afinní transformace B-spline křivky může být provedena jako křivka sestrojená nad afinním obrazem řídícího polygonu.
+%\end{veta}
+
+%\begin{proof}
+%	Nechť $\mathbf{r}$ je bod v~$E_3$ (Euklidovském prostoru). Afinní transformace je zobrazení $\Phi:$ $E_3\to E_3$, $\Phi\left(\mathbf{r}\right)=\mathbf{Ar+v}$. 
+%\end{proof}
+
+\begin{veta}[Konvexní obal]
+	\label{convex-hull}
+	Křivka náleží konvexnímu obalu řídícího polygonu. Dále pokud $u\in\left\langle u_i,u_{i+1}\right) $, potom $\mathbf{C}\left(u\right)$ náleží konvexnímu obalu řídících bodů $\mathbf{P}_{i-p},\mathbf{P}_{i-p+1},\dots,\mathbf{P}_i$, viz obr.~\ref{obrConvex}.
+\end{veta}
+
+%%todo: obr konvexní obal
+%{\LARGE (obrázek)}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/convex}
+	\end{center}
+	\caption[caption]{\centering Křivka náleží konvexnímu obalu řídícího polygonu (modře), bod $\mathbf{C}\left(u\right)$ pro $u\in\left\langle u_3,u_4\right) $ náleží konvexnímu obalu bodů $\mathbf{P}_1\mathbf{P}_2\mathbf{P}_3$ (čárkovaně)}
+	\label{obrConvex}
+\end{figure}
+
+\begin{veta}[Lokální kontrolovatelnost]
+	\label{local-modif}
+	Změna řídícího bodu $\mathbf{P}_i$ ovlivní křivku $\mathbf{C}\left(u\right)$ pouze na intervalu $\left\langle u_i, u_{i+p+1}\right) $.
+\end{veta}
+
+\begin{veta}
+	Křivka $\mathbf{C}\left(u\right)$ stupně $p$ je $C^{p-k}$ spojitá v~bodě $\mathbf{C}\left(u_i\right)$, kde $u_i$ je uzel násobnosti $k$.
+\end{veta}
+
+\begin{veta}
+	Žádná přímka (resp. rovina) nemá více průsečíků s~rovinnou (resp. prostorovou) křivkou než s~jejím řídícím polygonem.
+\end{veta}
+
+\begin{veta}[Invariance]\label{invariance}
+	B-spline (resp. NURBS) křivky jsou afinně (resp. projektivně) invariantní.
+\end{veta}
+
+\subsection{Vlastnosti ploch}
+Většina vlastností B-spline a~NURBS ploch vyplývá z vlastností křivek popsaných výše. Pro jednoduchost opět $N_{i,p}\left(u\right)N_{j,q}\left(v\right)$ značí jak B-spline bázové funkce, tak racionální bázové funkce $R_{i,p;j,q}\left(u,v\right)$ definované rovnicí~\ref{R_ij}.
+\begin{veta}[Nezápornost]
+	${N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)\geq 0$ pro všechna $i, j, p, q, u$ a~$v$.
+\end{veta}
+
+\begin{veta}
+	Platí $\sum_{i=0}^{m}\sum_{j=0}^{n}N_{i,p}\left(u\right)N_{j,q}\left(v\right)=1$ pro všechna $u \in \left\langle u_0,u_h \right\rangle$ a~$v \in \left\langle v_0,v_k \right\rangle$.
+\end{veta}
+
+\begin{veta}
+	${N}_{i,p}\left(u\right){N}_{j,q}\left(v\right)=0$ pokud $u \notin \left\langle u_i,u_{i+p+1} \right)$ nebo $v \notin \left\langle v_j,v_{j+q+1} \right)$.
+\end{veta}
+
+\begin{veta}
+	Pro $u \in \left\langle u_{i_0},u_{i_0+1} \right)$ a~$v \notin \left\langle v_{j_0},v_{j_0+1} \right)$ je nejvýše $\left(p+1\right) \left(q+1\right)$ bázových funkcí nenulových.
+\end{veta}
+
+\begin{veta}[Invariance]
+	B-spline (resp. NURBS) plochy jsou afinně (resp. projektivně) invariantní.
+\end{veta}
+
+\begin{veta}[Konvexní obal]
+	Pro $u \in \left\langle u_{i_0},u_{i_0+1} \right)$ a~$v \in \left\langle v_{j_0},v_{j_0+1} \right)$ náleží bod $\mathbf{S}\left( u,v\right)$ konvexnímu obalu řídících bodů $\mathbf{P}_{i,j}$, kde $i_0-p\leq i \leq i_0$ a~$j_0-q\leq j \leq j_0$.
+\end{veta}
+
+\begin{veta}[Lokální kontrolovatelnost]
+	Změna řídícího bodu $\mathbf{P}_{i,j}$ (resp. váhy $w_{i,j}$) ovlivní plochu $\mathbf{S}\left(u,v\right)$ pouze na intervalech $\left\langle u_i, u_{i+p+1}\right)$ a~$\left\langle v_j, v_{j+q+1}\right)$.
+\end{veta}
+
+\begin{veta}
+	Plocha $\mathbf{S}\left(u,v\right)$ je $C^{p-s}$ (resp. $C^{q-t}$) spojitá ve směru $u$ (resp. $v$) v~bodě $\mathbf{S}\left(u_i,v_j\right)$, pokud $u_i$ (resp. $v_j$) je uzel násobnosti $s$ (resp. $t$).
+\end{veta}
+
+
+\chapter{Rotační NURBS plochy}
+
+V rámci cílů této bakalářské práce jsem nastudoval teorii týkající se vytváření obecných NURBS křivek a~ploch. V~následující kapitole je vysvětlena tvorba rotačních NURBS ploch.
+
+Rotační plocha $\mathbf{S}\left(u,v\right)$ vzniká rotačním pohybem tzv. \emph{tvořící křivky} $\mathbf{C}\left(v\right)$ kolem osy rotace. Ve směru $u$ vznikají tzv. \emph{rovnoběžkové kružnice} (resp. kružnicové oblouky), ve směru $v$ jsou to tvořící křivky. \cite{Linkeova2015} 
+
+Nejprve je tedy potřeba odvodit vyjádření kružnic 
+%(resp. kružnicových oblouků)
+jako NURBS křivek, které budeme potřebovat pro zobrazení rovnoběžkových kružnic. Toto odvození, které je popsáno v~části~\ref{odvozeni}, jsem provedl ekvivalentně s~\cite{Shenec19972014}. % a~poté použil podobně jako v \cite{Pieglc1997}.
+Dále v~části~\ref{revSurf} odvodíme vztah pro plochu vzniklou rotací NURBS křivky $\mathbf{C}\left(v\right)$ podle \cite{Pieglc1997}.
+
+\section{Odvození kružnicových oblouků}\label{odvozeni}
+Kružnici budeme vyjadřovat jako spojení kružnicových oblouků, kde každý je NURBS křivkou stupně 2 se třemi řídícími body, přitom požadujeme, aby procházel krajními body. Pro první oblouk tedy máme řídící body $\mathbf{P}_0, \mathbf{P}_1, \mathbf{P}_2$ s~váhami $w_0=1$, $w_1$ a~$w_2=1$ a~uzlový vektor $\left\lbrace 0,0,0,1,1,1\right\rbrace$.
+
+Obecně je kuželosečka zadána rovnicí o šesti neznámých ve tvaru
+\begin{equation}
+Ax^2+2Bxy+Cy^2+2Dx+2Ey+F=0.
+\end{equation}
+Pro $F\neq0$ můžeme rovnici vydělit $F$ a~získáváme rovnici o pěti neznámých tvaru
+\begin{equation}
+	f: ax^2+2bxy+cy^2+2dx+2ey+1=0.
+\end{equation}
+\begin{poznamka}
+	Pokud je $F=0$, získáváme rovnou rovnici o pěti neznámých.
+\end{poznamka}
+Protože oblouk prochází krajními body $\mathbf{P}_0=[x_0,y_0]$ a~$\mathbf{P}_2=[x_2,y_2]$, získáváme
+\begin{subequations}
+	\begin{align}
+		f\left(\mathbf{P}_0\right)=ax_0^2+2bx_0y_0+cy_0^2+2dx_0+2ey_0+1&=0,\\
+		f\left(\mathbf{P}_2\right)=ax_2^2+2bx_2y_2+cy_2^2+2dx_2+2ey_2+1&=0.
+	\end{align}
+\end{subequations}
+Z definice~\ref{tangents} vyplývá, že spojnice bodů $\mathbf{P}_0\mathbf{P}_1$ a~$\mathbf{P}_1\mathbf{P}_2$ jsou tečnami v~krajních bodech $\mathbf{P}_0$ a~$\mathbf{P}_2$. Směrnice těchto tečen jsou tedy
+\begin{subequations}\label{smernice-geom}
+	\begin{align}
+		k_0&=\frac{y_1-y_0}{x_1-x_0},\\
+		k_2&=\frac{y_1-y_2}{x_1-x_2}.
+	\end{align}
+\end{subequations}
+Tyto směrnice lze také vyjádřit pomocí gradientu
+\begin{equation}
+	\nabla f=\left(2ax+2by+2d,2bx+2cy+2e\right)=\left(ax+by+d,bx+cy+e\right).
+\end{equation}
+Směrnice mají potom tvar
+\begin{subequations}\label{smernice-der}
+	\begin{align}
+		k_0&=-\frac{ax_0+by_0+d}{bx_0+cy_0+e},\\
+		k_2&=-\frac{ax_2+by_2+d}{bx_2+cy_2+e}.
+	\end{align}
+\end{subequations}
+Porovnáním rovnic \eqref{smernice-geom} a~\eqref{smernice-der} získáváme
+\begin{subequations}
+	\begin{align}
+	\frac{y_1-y_0}{x_1-x_0}&=-\frac{ax_0+by_0+d}{bx_0+cy_0+e},\\
+	\frac{y_1-y_2}{x_1-x_2}&=-\frac{ax_2+by_2+d}{bx_2+cy_2+e}.
+	\end{align}
+\end{subequations}
+
+Zatím jsme tedy získali čtyři rovnice pro pět neznámých. Aby byl kružnicový oblouk jednoznačně určen, potřebujeme ještě další, pátou rovnici. Tuto rovnici získáme z vyjádření bodu na křivce pomocí rovnice \eqref{nurbs}. Obecně tedy dostáváme
+\begin{equation}
+	\mathbf{C}\left(u\right)=\frac{\left(1-u\right)^2\mathbf{P}_0+2u\left(1-u\right)w_1\mathbf{P}_1+u^2\mathbf{P}_2}{\left(1-u\right)^2+2u\left(1-u\right)w_1+u^2}.
+\end{equation}
+Nechť střed $\mathbf{P}_0\mathbf{P}_2$ je střed souřadného systému $\mathbf{M}$ a~tedy $\mathbf{P}_0=-\mathbf{P}_2$, dále nechť $\varphi$ je středový úhel kružnicového oblouku a~$u=\frac{1}{2}$, potom
+\begin{equation}\label{X=C(1/2)}
+	\mathbf{X}=\mathbf{C}\left(\frac{1}{2}\right)=\frac{w_1}{1+w_1}\mathbf{P}_1.
+\end{equation}
+Tuto situaci popisuje obr.~\ref{oblouk}.
+\begin{figure}[!h]
+	\begin{center}
+	   \includegraphics*[]{obr/oblouk}
+	\end{center}
+	\caption{Kružnicový oblouk}
+	\label{oblouk}
+\end{figure}
+
+Z pravoúhlého trojúhelníku $\mathbf{OMP}_0$ získáváme $\left|\mathbf{OM}\right|=r\cos\left(\varphi/2\right)$ a~z pravoúhlého trojúhelníku $\mathbf{OP}_0\mathbf{P}_1$ získáváme $\left|\mathbf{OP}_1\right|=r/\sin\left(\varphi/2\right)$. Zřejmě
+\begin{equation}\label{MX}
+	\left| \mathbf{MX}\right|=\left| \mathbf{OX}\right| -\left| \mathbf{OM}\right|=r-r\cos\left(\varphi/2\right)=r\left(1-\cos\left(\varphi/2\right)\right),
+\end{equation}
+a
+\begin{equation}\label{MP1}
+	\left| \mathbf{MP}_1\right|=\left| \mathbf{OP}_1\right| -\left| \mathbf{OM}\right| =\frac{r}{\cos\left(\varphi/2\right)}-r\cos\left(\varphi/2\right)=\frac{r\left(1-\cos^2\left(\varphi/2\right)\right)}{\cos\left(\varphi/2\right)}.
+\end{equation}
+Dosazením rovnic \eqref{MX} a~\eqref{MP1} do rovnice \eqref{X=C(1/2)} získáváme
+\begin{equation}
+	\frac{\mathbf{X}}{\mathbf{P}_1}=\frac{\mathbf{X}-\mathbf{M}}{\mathbf{P}_1-\mathbf{M}}=\frac{\left|\mathbf{MX}\right|}{\left|\mathbf{MP}_1\right|}=\frac{w_1}{1+w_1}=\frac{\cos\left(\varphi/2\right)}{1+\cos\left(\varphi/2\right)}.
+\end{equation}
+Z tohoto vyplývá řešení
+\begin{equation}\label{w=cos(fi/2)}
+	w_1=\cos\left(\frac{\varphi}{2}\right).
+\end{equation}
+
+Úplnou kružnici lze potom zobrazit například jako čtyři spojené kružnicové oblouky se středovými úhly $\varphi=90^{\circ}$, řídící body $\mathbf{P}_0,\dots,\mathbf{P}_8$ tedy tvoří čtverec, viz obr.~\ref{kruznice}. Protože chceme, aby křivka procházela body $\mathbf{P}_0,\mathbf{P}_2,\mathbf{P}_4,\mathbf{P}_6,\mathbf{P}_8$, uzlový vektor je\linebreak$\left\lbrace 0,0,0,\frac{1}{4},\frac{1}{4},\frac{1}{2},\frac{1}{2},\frac{3}{4},\frac{3}{4},1,1,1 \right\rbrace $.
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/kruh}
+	\end{center}
+	\caption{Kružnice s~řídícími body}
+	\label{kruznice}
+\end{figure}
+
+\section{Rotační NURBS plochy -- odvození}\label{revSurf}
+
+Nechť $\mathbf{C}\left(v\right)=\sum_{j=0}^{m}R_{j,q}\left(v\right)\mathbf{P}_j$ je NURBS křivka stupně $q$ na uzlovém vektoru $V$, $v\in V$. Křivku $\mathbf{C}\left(v\right)$ chceme rotovat kolem osy. Nechť tedy $\mathbf{C}\left(v\right)$ leží např. V~rovině $xy$, osa rotace je shodná s~osou $y$ a úhel rotace je $360^\circ$. Pro plochu $\mathbf{S}\left(u,v\right)$, která vznikne touto rotací, zřejmě platí, že pro pevně zvolené $\overline{u}$ je $\mathbf{S}\left(\overline{u},v\right)$ tvořící křivka $\mathbf{C}\left(v\right)$ rotovaná o~ nějaký úhel kolem osy $y$ a~pro pevně zvolené $\overline{v}$ je $\mathbf{S}\left(u,\overline{v}\right)$ kružnice se středem na ose $y$ ležící v~rovině kolmé k této ose.
+
+Při použití vyjádření kružnice z předchozí části~\ref{odvozeni}, tedy pro uzlový vektor \linebreak$U=\left\lbrace 0,0,0,\frac{1}{4},\frac{1}{4},\frac{1}{2},\frac{1}{2},\frac{3}{4},\frac{3}{4},1,1,1 \right\rbrace$ a váhy $w_i=\left\lbrace 1,\frac{\sqrt{2}}{2},1,\frac{\sqrt{2}}{2},1,\frac{\sqrt{2}}{2},1,\frac{\sqrt{2}}{2},1\right\rbrace$, má výsledná rotační plocha tvar
+\begin{equation}
+\mathbf{S}\left(u,v\right)=\sum_{i=0}^{8}\sum_{j=0}^{m}R_{i,2;j,q}\left(u,v\right)\mathbf{P}_{i,j},\quad u\in U, v\in V
+\end{equation}
+
+%Protože NURBS křivky mohou zobrazit kružnicový oblouk pouze s vnitřním úhlem $\theta\in\left(0^\circ,90^\circ\right\rangle$, je potřeba rozdělit výsledný kružnicový oblouk s vnitřním úhlem $\varphi$ na $n$ menších kružnicových oblouků.
+V závislosti na velikosti úhlu rotace $\varphi$ potom budou kružnicové oblouky $\mathbf{S}\left(u,\overline{v}\right)$ spojením $n$ kružnicových oblouků s vnitřním úhlem $\theta=\dfrac{\varphi}{n}$. Pro uzlový vektor $U$ a~váhy $w_i$ platí:
+\begin{align*}
+	\varphi\in\left(0^\circ,90^\circ\right\rangle:\quad n&=1, U=\left\lbrace 0,0,0,1,1,1 \right\rbrace, w_i=\left\lbrace 1,\cos(\theta/2),1 \right\rbrace,\\
+	\varphi\in\left(90^\circ,180^\circ\right\rangle:\quad n&=2, U=\left\lbrace 0,0,0,\frac{1}{2},\frac{1}{2},1,1,1 \right\rbrace, w_i=\left\lbrace 1,\cos(\theta/2),1,\cos(\theta/2),1 \right\rbrace,\\
+	\varphi\in\left(180^\circ,270^\circ\right\rangle:\quad n&=3, U=\left\lbrace 0,0,0,\frac{1}{3},\frac{1}{3},\frac{2}{3},\frac{2}{3},1,1,1 \right\rbrace,\\
+	w_i&=\left\lbrace 1,\cos(\theta/2),1,\cos(\theta/2),1,\cos(\theta/2),1 \right\rbrace,\\
+	\varphi\in\left(270^\circ,360^\circ\right\rangle:\quad n&=4, U=\left\lbrace 0,0,0,\frac{1}{4},\frac{1}{4},\frac{1}{2},\frac{1}{2},\frac{3}{4},\frac{3}{4},1,1,1 \right\rbrace,\\
+	w_i&=\left\lbrace 1,\cos(\theta/2),1,\cos(\theta/2),1,\cos(\theta/2),1,\cos(\theta/2),1 \right\rbrace
+\end{align*}
+
+Obecně je tedy rotační plocha tvaru
+\begin{equation}
+\mathbf{S}\left(u,v\right)=\sum_{i=0}^{2n}\sum_{j=0}^{m}R_{i,2;j,q}\left(u,v\right)\mathbf{P}_{i,j},\quad u\in U, v\in V
+\end{equation}
+
+
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[height=12cm]{obr/koule}
+	\end{center}
+	\caption{Koule vzniklá rotací půlkružnice}
+	\label{obrKoule}
+\end{figure}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=\textwidth]{obr/anuloid_cast}
+	\end{center}
+	\caption{Část anuloidu vzniklá rotací kružnice kolem osy s úhlem rotace $\varphi=235^\circ$}
+	\label{obrAnuloid}
+\end{figure}
+
+\clearpage
+\chapter{Programová část}\label{progCast}
+
+Součástí této bakalářské práce je program, který ze zadané NURBS křivky a~osy rotace vytvoří rotační NURBS plochu. V této kapitole si uvedeme důležité algoritmy, které jsem použil.
+
+\section{Vytvoření uzlového vektoru}
+Připomeňme, že NURBS křivka musí splňovat rovnost $m=n+p+1$. Je tedy potřeba zvolit, které dva z těchto tří prvků může uživatel u~vstupní křivky ovlivnit. Protože práce s~uzlovým vektorem je nejméně intuitivní, jako vstup do algoritmu jsem zvolil stupeň křivky $p$ a~počet řídících bodů $n+1$. Uzlový vektor %je tedy potřeba generovat automaticky 
+generujeme pomocí algoritmu~\ref{GenKnotVec}, který vytváří uniformní uzlový vektor pro sevřené křivky dle \cite{Shenec19972014}. Podle části~\ref{odvozeni} potřebujeme pro zobrazení kuželoseček neuniformní uzlový vektor. Z~tohoto důvodu může uživatel ručně upravit hodnoty automaticky vytvořeného uzlového vektoru.
+
+\begin{algorithm}[H]
+	\caption{Generování uzlového vektoru}
+	\label{GenKnotVec}
+	\begin{algorithmic}[1]
+		\Function{GenerateKnotVector}{$n,p$}
+		\State $j=1$;
+		\For{$i=0,\dots,n+p+2$}
+		\If{$(i\leq p)$}
+		\State $\text{knotVector}\left[i\right]=0$;
+		\ElsIf{$(i\leq n)$}
+		\State $\text{knotVector}\left[i\right]=j/\left(n-p+1\right)$;
+		\State $j\text{++}$;
+		\Else
+		\State $\text{knotVector}\left[i\right]=1$;
+		\EndIf
+		\EndFor
+		\State \textbf{return} knotVector;
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+
+\section{De Boorův algoritmus}
+
+Pro výpočet bodů na křivce jsem zvolil tzv. de Boorův algoritmus \cite{Jankauskas2010,Shenec19972014}, který je rychlý a~numericky stabilní, protože nepotřebuje výpočet bázových funkcí. Tento algoritmus využijeme jak pro zadání vstupní křivky, tak pro zobrazení rotační plochy v~prostoru.
+
+\subsection{De Boorův algoritmus pro NURBS křivku}\label{deboor-krivka}
+Základní princip de Boorova algoritmu vyplývá z věty~\ref{multiple-knots}. Při zvýšení násobnosti uzlu $u_i$ se snižuje počet nenulových bázových funkcí na tomto uzlu. Pokud je násobnost rovna stupni $p$, existuje právě jedna nenulová bázová funkce a~její hodnota je rovna 1 (viz věta~\ref{partition-of-unity}). Pokud $u=u_i$, je funkce $N_{i,p}\left(u\right)$ nenulová na intervalu $\left\langle u_i, u_{i+1}\right)$ a~bod křivky $\mathbf{C}\left(u\right)$ je ovlivněn právě jedním bodem $\mathbf{P}_i$ (věta~\ref{local-modif}). Zřejmě tedy platí 
+\begin{equation}\label{DeBoorEndpoint}
+\mathbf{C}\left(u\right)=N_{i,p}\left(u\right)\mathbf{P}_i=\mathbf{P}_i
+\end{equation}
+De Boorův algoritmus využívá této vlastnosti -- opakovaně vkládáme $u$ do uzlového vektoru, dokud násobnost tohoto uzlu není $p$. Poslední vytvořený řídící bod je totožný s~bodem na křivce odpovídajícím $u$.
+
+\sloppy Pro řídící body $\mathbf{P}_0,\dots,\mathbf{P}_n$, uzlový vektor $U=\left\lbrace u_0,\dots,u_m\right\rbrace$ a~stupeň $p$ chceme do uzlového vektoru vložit nový uzel $u$ tak, aby tvar křivky $\mathbf{C}\left(t\right)$ zůstal nezměněn. Předpokládejme, že nový uzel $u$ leží v~uzlové rozteči $\left\langle u_k, u_{k+1}\right)$. Bod $\mathbf{C}\left(u\right)$ leží v~konvexním obalu bodů $\mathbf{P}_k,\mathbf{P}_{k-1},\dots,\mathbf{P}_{k-p}$ (věta~\ref{convex-hull}) a~bázové funkce pro všechny ostatní řídící body jsou nulové (věta~\ref{local-support}). Potřebujeme nalézt nové řídící body $\mathbf{Q}_k,\mathbf{Q}_{k-1},\dots,\mathbf{Q}_{k-p+1}$ takové, aby byl původní řídící polygon $\mathbf{P}_0,\dots,\mathbf{P}_n$ nahrazen polygonem $\mathbf{P}_0,\dots,\mathbf{P}_{k-p},\mathbf{Q}_{k-p+1},\dots,\mathbf{Q}_k,\mathbf{P}_k,\dots,\mathbf{P}_n$. Pro body $\mathbf{Q}_i$ platí
+\begin{subequations}
+	\begin{gather}
+	\mathbf{Q}_i=\left(1-a_i\right)\mathbf{P}_{i-1}+a_i\mathbf{P}_i,\quad k-p+1\leq i\leq k,\\
+	a_i=\frac{u-u_i}{u_{i+p}-u_i}.\label{a-i}
+	\end{gather}
+\end{subequations}
+
+Analogicky s~rovnicí \eqref{nurbs} lze tuto rovnici přepsat pomocí homogenních souřadnic, tedy
+\begin{equation}\label{nurbsDeBoor}
+\mathbf{Q}^w_i=\left(1-a_i\right)\mathbf{P}^w_{i-1}+a_i\mathbf{P}^w_i,\quad k-p+1\leq i\leq k,
+\end{equation}
+kde $a_i$ splňuje \eqref{a-i}.
+
+S ohledem na definici~\ref{tangents} a~rovnice \eqref{DeBoorEndpoint}, \eqref{a-i} a~\eqref{nurbsDeBoor} lze De Boorův algoritmus pro NURBS křivku stupně $p$, kde $u\in\left\langle u_k, u_{k+1}\right)$ a~
+
+\begin{equation}
+s=
+\begin{cases}
+0 & \text{pro $u\neq u_k$},\\
+\text{násobnost uzlu $u_k$} & \text{pro $u=u_k$},
+\end{cases}
+\end{equation}
+zapsat pomocí algoritmu~\ref{AlgDeBoor}. V~tomto algoritmu je potřeba nejdříve ošetřit speciální případy pro $u=0$, $u=1$ a~$s=p$. Dále zde používáme funkci \texttt{To4D()}, která převádí bod do homogenních souřadnic $\mathbf{P}^w=\left[X,Y,Z,w\right]=\left[wx,wy,wz,w\right]$, a~funkci \texttt{To3D()}, která převádí bod zpět do souřadnic kartézských $\mathbf{P}=\left[x,y,z\right]=\left[X/w,Y/w,Z/w\right]$.
+%	\begin{algorithm}[H]
+%		%\KwIn{$u,\left\lbrace \mathbf{P}_n \right\rbrace, U $}
+%		%\KwOut{$\mathbf{C}\left(u\right)$}
+%		%\BlankLine
+%		
+%		\If{$(u==0)$}{$\mathbf{C}\left(u\right)=\mathbf{P}_0$\;}
+%		\If{$(u==1)$}{$\mathbf{C}\left(u\right)=\mathbf{P}_n$\;}
+%		\If{$(s==p)$}{$\mathbf{C}\left(u\right)=\mathbf{P}_k$\;}
+%		\BlankLine
+%		\For{$i=k-p\dots k-s$}{
+%			$\mathbf{P}^w_{i,0}=\mathbf{P}_i$.To4D()\;
+%		}
+%		\For{$r=1,\dots,p-s$}{
+%			\For{$i=k-p+r,\dots, k-s$}{
+%				$a_{i,r}=\left( u-u_i\right) /\left( u_{i+p-r+1}-u_i\right) $\;
+%				$\mathbf{P}^w_{i,r}=\left(1-a_{i,r}\right)\mathbf{P}^w_{i-1,r-1}+a_{i,r}\mathbf{P}^w_{i,r-1}$\;
+%			}
+%		}
+%		$\mathbf{C}\left(u\right)=\mathbf{P}^w_{k-s,p-s}$.To3D()\;
+%		
+%		\caption{De Boorův algoritmus pro NURBS křivku}
+%	\end{algorithm}
+\begin{algorithm}[H]
+	\caption{De Boorův algoritmus pro bod na NURBS křivce}
+	\label{AlgDeBoor}
+	\begin{algorithmic}[1]
+		\Function{DeBoor}{$u,\left\lbrace \mathbf{P}_i \right\rbrace$}
+		\If{$(u==0)$}
+		\State \textbf{return} $\mathbf{C}\left(u\right)=\mathbf{P}_0$;
+		\EndIf
+		\If{$(u==1)$}
+		\State \textbf{return} $\mathbf{C}\left(u\right)=\mathbf{P}_n$;
+		\EndIf
+		\If{$(s==p)$}
+		\State \textbf{return} $\mathbf{C}\left(u\right)=\mathbf{P}_k$;
+		\EndIf
+		\Statex
+		\For{$i=k-p,\dots,k-s$}
+		\State $\mathbf{P}^w_{i,0}=\mathbf{P}_i$.\Call{To4D}{\,};
+		\EndFor
+		\For{$r=1,\dots,p-s$}
+		\For{$i=k-p+r,\dots, k-s$}
+		\State $a_{i,r}=\left( u-u_i\right) /\left( u_{i+p-r+1}-u_i\right) $;
+		\State $\mathbf{P}^w_{i,r}=\left(1-a_{i,r}\right)\mathbf{P}^w_{i-1,r-1}+a_{i,r}\mathbf{P}^w_{i,r-1}$;
+		\EndFor
+		\EndFor
+		\State \textbf{return} $\mathbf{C}\left(u\right)=\mathbf{P}^w_{k-s,p-s}$.\Call{To3D}{\,};
+		\EndFunction
+	\end{algorithmic}		
+\end{algorithm}
+
+
+
+\subsection{De Boorův algoritmus pro bod NURBS plochy}
+
+Rovnici \eqref{nurbs-surface-homo} lze přepsat do tvaru
+\begin{equation}
+\mathbf{S}^w\left(u,v\right)=\sum _{i=0}^{m}{N}_{i,p}\left(u\right)\left(\sum _{j=0}^{n}{N}_{j,q}\left(v\right)\mathbf{P}^w_{i,j}\right), \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle,
+\end{equation}
+potom pro pevně zvolené $i$ je člen v~závorce NURBS křivkou definovanou řídícími body $\mathbf{P}_{i,j}$. Pokud tedy definujeme
+\begin{equation}
+\mathbf{Q}_i\left(v\right)=\sum _{j=0}^{n}{N}_{j,q}\left(v\right)\mathbf{P}^w_{i,j},\quad v \in \left\langle v_0,v_k \right\rangle,
+\end{equation}
+můžeme tyto body $\mathbf{Q}_i\left(v\right)$ získat de Boorovým algoritmem pro křivku uvedeným v~části~\ref{deboor-krivka} a~lze psát
+\begin{equation}
+\mathbf{S}^w\left(u,v\right)=\sum _{i=0}^{m}{N}_{i,p}\left(u\right)\mathbf{Q}_i\left(v\right), \quad u \in \left\langle u_0,u_h \right\rangle,\ v \in \left\langle v_0,v_k \right\rangle.
+\end{equation}
+Je zřejmé, že tyto body lze získat opět de Boorovým algoritmem pro křivku.
+
+De Boorův algoritmus pro bod NURBS plochy stupně $p$ ve směru $u$ a~stupně $q$ ve směru $v$ definované na síti řídících bodů $\left\lbrace \mathbf{P}_{i,j} \right\rbrace$ a~uzlových vektorech  $U=\left\lbrace u_0,\dots,u_h \right\rbrace $ a~$V=\left\lbrace v_0,\dots,v_k \right\rbrace $ lze pro $u\in\left\langle u_c, u_{c+1}\right)$, $v\in\left\langle v_d, v_{d+1}\right)$, 
+\begin{equation*}
+a=
+\begin{cases}
+0 & \text{pro $u\neq u_c$},\\
+\text{násobnost uzlu $u_c$} & \text{pro $u=u_c$},
+\end{cases}
+\end{equation*}
+a
+\begin{equation*}
+b=
+\begin{cases}
+0 & \text{pro $v\neq v_d$},\\
+\text{násobnost uzlu $v_d$} & \text{pro $v=v_d$},
+\end{cases}
+\end{equation*}
+zapsat pomocí algoritmu~\ref{AlgDeBoorSurf}.
+\begin{center}
+	%	\begin{algorithm}[H]\label{AlgDeBoorSurf}
+	%		\For{$i=c-p\dots c-a$}{
+	%			$\mathbf{Q}_i=$DeBoor$\left(v,\left\lbrace \mathbf{P}_{i,d-q},\dots,\mathbf{P}_{i,d-b}\right\rbrace\right)$\;
+	%		}
+	%		$\mathbf{S}\left(u,v\right)=$DeBoor$\left(u,\left\lbrace \mathbf{Q}_{c-p},\dots,\mathbf{Q}_{c-a}\right\rbrace\right)$\;
+	%		\caption{De Boorův algoritmus pro NURBS plochu}
+	%	\end{algorithm}
+	\begin{algorithm}[H]
+		\caption{De Boorův algoritmus pro bod NURBS plochy}
+		\label{AlgDeBoorSurf}
+		\begin{algorithmic}[1]
+			\Function{DeBoorSurface}{$u,v,\left\lbrace \mathbf{P}_{i,j} \right\rbrace$}
+			\For{$i=c-p,\dots,c-a$}
+			\State $\mathbf{Q}_i=$ \Call{DeBoor}{$v,\left\lbrace \mathbf{P}_{i,d-q},\dots,\mathbf{P}_{i,d-b}\right\rbrace$};
+			\EndFor
+			\State \textbf{return} $\mathbf{S}\left(u,v\right)=$ \Call{DeBoor}{$u,\left\lbrace \mathbf{Q}_{c-p},\dots,\mathbf{Q}_{c-a}\right\rbrace$};
+			\EndFunction
+		\end{algorithmic}
+	\end{algorithm}
+	
+	
+\end{center}
+\begin{poznamka}
+	Stejně jako v~případě de Boorova algoritmu pro křivku, je nutné nejdříve ošetřit speciální případy pro $u=0$, $u=1$, $v=0$ a~$v=1$. To je popsáno v~tabulce~\ref{TabSpecPrip}.
+
+	\begin{table}[!ht]
+		\begin{center}
+			\centering
+			\renewcommand{\arraystretch}{1.3}
+			\bigskip
+			\caption{Speciální případy}
+			\label{TabSpecPrip}
+			\begin{tabular}{|c|ccc|}
+				\hline
+				$v\backslash{}u$ & $0$ & $\left(0;1\right)$ & $1$ \\ \hline
+				$0$ & $\mathbf{P}_{0,0}$ & \texttt{DeBoor}$\left(u,\left\lbrace \mathbf{P}_{i,0} \right\rbrace \right)$ & $\mathbf{P}_{n,0}$   \\
+				$\left(0;1\right)$ & \texttt{DeBoor}$\left(u,\left\lbrace \mathbf{P}_{0,j} \right\rbrace \right)$ & \texttt{DeBoorSurface}$\left(u,v,\left\lbrace \mathbf{P}_{i,j} \right\rbrace \right)$ & \texttt{DeBoor}$\left(u,\left\lbrace \mathbf{P}_{n,j} \right\rbrace \right)$ \\
+				$1$ & $\mathbf{P}_{0,m}$   & \texttt{DeBoor}$\left(u,\left\lbrace \mathbf{P}_{i,m} \right\rbrace \right)$ & $\mathbf{P}_{n,m}$  \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+\end{poznamka}
+\pagebreak
+\section{Zobrazení rovnoběžkových kružnic}
+
+NURBS křivky jsou afinně invariantní (viz věta~\ref{invariance}), proto můžeme rotovat pouze řídící body a~na nich počítat výslednou křivku. Mějme tedy situaci, kdy chceme rotovat bod $\mathbf{P}_0$ o úhel $\varphi$. Potřebujeme tedy sestrojit kružnicový oblouk se středovým úhlem $\varphi$. Rozdělme tento úhel na stejně velké úhly $\theta$, tak, aby $\theta\leq90^{\circ}$. Výsledný kružnicový oblouk bude spojením menších kružnicových oblouků se středovými úhly $\theta$, viz obr.~\ref{rozdeleni}. Body $\mathbf{P}_2$,$\mathbf{P}_4$, atd. získáme jednoduše rotací kolem osy $y$ (funkce \texttt{RotateY($\mathbf{P}_0,\theta$)}), viz rovnice~\eqref{rotace}.
+
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/rozdeleni}
+	\end{center}
+	\caption{Rozdělení kružnicového oblouku}
+	\label{rozdeleni}
+\end{figure}
+% Souřadnice bodu $\mathbf{P}_1$ jsem odvodil následovně, viz obrázek~\ref{obrRotace}.
+%
+%todo: přepsat na transformaci souřadnic. systému?
+Odvození souřadnic bodů $\mathbf{P}_1$, $\mathbf{P}_3$, atd. ilustruje obr.~\ref{obrRotace}.
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[]{obr/rotace}
+	\end{center}
+	\caption{Odvození bodu $\mathbf{P}_1$}
+	\label{obrRotace}
+\end{figure}\\
+%Nejdříve rotujeme bod $\mathbf{P}_0$ do bodu $\mathbf{P}_0'$ tak, že jeho $z$-ová souřadnice je rovna 0. Úhel této rotace je 
+Nejdříve rotujeme bod $\mathbf{P}_0$ do bodu $\mathbf{P}_0'$ tak, že bod $\mathbf{P}_0'$ leží na ose $x$. Úhel této rotace je 
+\begin{equation}
+\beta=\tan^{-1}\left(\frac{z_0}{x_0}\right).
+\end{equation}
+Potom souřadnice bodu $\mathbf{P}_0'$ jsou
+\begin{subequations}
+	\begin{align}
+	x_0'&=x_0\cos\left(-\beta\right)-z_0\sin\left(-\beta\right),\\
+	z_0'&=0.
+	\end{align}
+\end{subequations}
+Z pravoúhlého trojúhelníka $\mathbf{O}\mathbf{P}_0'\mathbf{P}_1'$ vypočítáme souřadnice bodu $\mathbf{P}_1'$:
+\begin{subequations}
+	\begin{align}
+	x_1'&=x_0',\\
+	z_1'&=x_1'\tan\left(\theta/2\right).
+	\end{align}
+\end{subequations}
+Bod $\mathbf{P}_1'$ rotujeme zpět o úhel $\beta$ a~získáváme souřadnice bodu $\mathbf{P}_1$
+\begin{subequations}
+	\begin{align}
+	x_1&=x_1'\cos\left(\beta\right)-z_1'\sin\left(\beta\right),\\
+	z_1&=x_1'\sin\left(\beta\right)+z_1'\cos\left(\beta\right).
+	\end{align}
+\end{subequations}
+Dle rovnice \eqref{w=cos(fi/2)} spočítáme váhu bodu $\mathbf{P}_1$
+\begin{equation}
+w_1=w_0\cos\left(\theta/2\right).
+\end{equation}
+Tento postup, který provádí funkce \texttt{MiddlePoint($\mathbf{P},\theta$)}, opakujeme tolikrát, kolik je menších kružnicových oblouků se středovým úhlem $\theta$. Celý kružnicový oblouk se středovým úhlem $\varphi$, resp. jeho řídící polygon a~uzlový vektor poté získáme pomocí algoritmu~\ref{algArc}.
+\begin{algorithm}[H]
+	\caption{Kružnicový oblouk}
+	\label{algArc}
+	\begin{multicols}{2}
+		\begin{algorithmic}[1]
+			\Function{Arc}{$\mathbf{P}_0,\varphi$}
+			\State P$\left[0\right]=\mathbf{P}_0$;
+			\If{$\left(\varphi\leq90\right)$}
+			\State $\text{arcs}=1$;
+			\State $\text{knotVector}=\left\lbrace0,0,0,1,1,1\right\rbrace$;
+			\ElsIf{$\left(\varphi\leq180\right)$}
+			\State $\text{arcs}=2$;
+			\State $\text{knotVector}=\left\lbrace0,0,0,\frac{1}{2},\frac{1}{2},1,1,1\right\rbrace$;
+			\ElsIf{$\left(\varphi\leq270\right)$}
+			\State $\text{arcs}=3$;
+			\State \begin{varwidth}[t]{\linewidth}
+				$\text{knotVector}=$\par\hskip\algorithmicindent$\left\lbrace0,0,0,\frac{1}{3},\frac{1}{3},\frac{2}{3},\frac{2}{3},1,1,1\right\rbrace$;
+			\end{varwidth}
+			\ElsIf{$\left(\varphi\leq360\right)$}
+			\State $\text{arcs}=4$;
+			\State \begin{varwidth}[t]{\linewidth} $\text{knotVector}=$\par\hskip\algorithmicindent$\left\lbrace0,0,0,\frac{1}{4},\frac{1}{4},\frac{1}{2},\frac{1}{2},\frac{3}{4},\frac{3}{4},1,1,1\right\rbrace$; \end{varwidth}
+			\EndIf
+			\State $\theta=\varphi/\text{arcs}$;
+			
+			\If{$\text{arcs}\geq1$}
+			\State P$\left[1\right]=$ \Call{MiddlePoint}{P$\left[0\right],\varphi$};
+			\State P$\left[2\right]=$ \Call{RotateY}{P$\left[0\right],\varphi$};
+			\EndIf
+			\If{$\text{arcs}\geq2$}
+			\State P$\left[3\right]=$ \Call{MiddlePoint}{P$\left[2\right],\varphi$};
+			\State P$\left[4\right]=$ \Call{RotateY}{P$\left[2\right],\varphi$};
+			\EndIf
+			\If{$\text{arcs}\geq3$}
+			\State P$\left[5\right]=$ \Call{MiddlePoint}{P$\left[4\right],\varphi$};
+			\State P$\left[6\right]=$ \Call{RotateY}{P$\left[4\right],\varphi$};
+			\EndIf
+			\If{$\text{arcs}\geq4$}
+			\State P$\left[7\right]=$ \Call{MiddlePoint}{P$\left[6\right],\varphi$};
+			\State P$\left[8\right]=$ \Call{RotateY}{P$\left[6\right],\varphi$};
+			\EndIf
+			
+			\State \textbf{return} P;
+			\EndFunction
+		\end{algorithmic}
+	\end{multicols}
+\end{algorithm}
+
+\section{Program}\label{castProg}
+Zvolil jsem jazyk C\texttt{\#}, což je moderní, jednoduchý, mnohoúčelový, objektově orientovaný programovací jazyk, vyvíjený společností Microsoft pro platformu .NET. Pro design uživatelského prostředí byla zvolena knihovna Windows Presentation Foundation (WPF), která je součástí .NET. Jedná se o nástupce knihovny Windows Forms, oproti které má řadu výhod (vektorová grafika, hardwarová akcelerace pomocí DirectX, atd.) \cite{Albahari2017}. Pro výstupní 3D okno jsem zvolil open-source knihovnu Helix Toolkit, která poskytuje jednoduché nástroje pro práci s~3D prostorem \cite{SySIOwTMR9FCsrtU}.
+
+Při spuštění programu \texttt{NURBS.exe} se uživateli zobrazí vstupní okno, viz obr.~\ref{obrInputWin}, s~následujícími ovládacími prvkami:
+\begin{multicols}{2}
+	\begin{enumerate}
+		\item smaže všechny řídící body,
+		\item nastavení úhlu rotace,
+		\item rotuje zadanou křivku (otevře výstupní okno),
+		\item stupeň křivky,
+		\item uzlový vektor,
+		\item možnost ruční úpravy uzlového vektoru,
+		\item $x$-ová souřadnice osy rotace,
+		\item tabulka popisující řídící body (souřadnice, váha),
+		\item uloží zadanou křivku jako obrázek,
+		\item zobrazí nápovědu,
+		\item osa rotace (bod lze přesouvat pomocí myši),
+		\item křivka s řídícími body (lze přesouvat pomocí myši, mazat).
+	\end{enumerate}
+\end{multicols}
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=\textwidth]{obr/InputWin}
+	\end{center}
+	\caption{Vstupní okno programu}
+	\label{obrInputWin}
+\end{figure}
+
+\pagebreak
+Po stisknutí tlačítka \texttt{Rotate} se zobrazí výstupní okno s danou rotační plochou, viz obr.~\ref{obrOutputWin}.
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=\textwidth]{obr/OutputWin}
+	\end{center}
+	\caption{Výstupní okno programu}
+	\label{obrOutputWin}
+\end{figure}
+\begin{multicols}{2}
+	\begin{enumerate}
+		\item zobrazí menu voleb vykreslení,
+		\item vykreslí osu rotace,
+		\item vykreslí vstupní křivku,
+		\item vykreslí řídící síť,
+		\item vykreslí rovnoběžkové kružnice,
+		\item vykreslí poledníky (rotované vstupní křivky),
+		\item uloží výslednou rotační plochu jako obrázek,
+		\item zobrazí nápovědu,
+		\item okno 3D prostoru,
+		\item ovládací kostka.
+	\end{enumerate}
+\end{multicols}
+\begin{poznamka}
+	Vstupní okno používá běžný souřadný systém používaný v počítačové grafice (viz obr.~\ref{obrInputWin} vlevo dole) -- bod $\left[0;0\right]$ se nachází vlevo nahoře. Výstupní okno přepočítává souřadnice tak, že osa rotace je shodná s osou $y$, souřadnice $x$ zůstávají stejné.
+\end{poznamka}
+
+\clearpage
+\section{Výstupy programu}\label{vystupy}
+V této části jsou zobrazeny různé druhy rotačních ploch, které byly vytvořeny vytvořeným programem.
+
+Na obr. \ref{obrParab} a \ref{obrHyperb} můžeme vidět kvadriky, konkrétně rotační paraboloid a hyperboloid, což jsou algebraické plochy 2. stupně.
+
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=9cm]{obr/paraboloid}
+	\end{center}
+	\caption{Rotační paraboloid}
+	\label{obrParab}
+\end{figure}
+\begin{figure}[!h]
+\begin{center}
+	\includegraphics*[width=9cm]{obr/hyperboloid}
+\end{center}
+\caption{Rotační hyperboloid}
+\label{obrHyperb}
+\end{figure}
+\clearpage
+Na obr. \ref{obrVaza} vidíme obecnou Rotační NURBS plochu, konkrétně model vázy včetně řídící sítě.
+
+\begin{figure}[!h]
+\begin{center}
+	\includegraphics*[width=9cm]{obr/vaza}
+\end{center}
+\caption{"Váza" se sítí řídících bodů (zeleně)}
+\label{obrVaza}
+\end{figure}
+
+V programu lze zadat libovolný úhel rotace $\varphi\in\left\langle 0^\circ;360^\circ \right\rangle$, můžeme tedy docílit například čtvrtkoule (obr. \ref{obrCtvrt}). 
+
+\begin{figure}[!h]
+	\begin{center}
+		\includegraphics*[width=9cm]{obr/ctvrtkoule}
+	\end{center}
+	\caption{"Čtvrtkoule"}
+	\label{obrCtvrt}
+\end{figure}
+
+
+\clearpage

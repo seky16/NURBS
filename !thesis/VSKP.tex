@@ -1,0 +1,62 @@
+%%%
+%%%
+%%% Vytvoří náležitosti dle směrnice rektora
+%%%    Soubor VSKP.tex
+%%%
+%% Do preambule hlavního souboru vložte následující příkazy:
+%%    \usepackage{VSKP}  % Načte styl šablony dle směrnice rektora
+%%    \input{VSKP}       % Načte data pro vyplnění šablony
+%%    \usepackage{fontspec}  % Pro vkládání OTF fontů (vyžaduje titulní list) - nefunguje v pdfLaTeXu
+%%
+%% Na začátek hlavního souboru (za \begin{document} ) vložte příkazy pro vysázení desek
+%%   \titul% vytiskne titul práce
+%%   \abstrakty% vytiskne stránku s abstrakty
+%%
+%% Použité kódování UTF-8
+%%
+%%% Generování údajů
+
+\fakulta{Fakulta strojního inženýrství}
+\enfakulta{Faculty of Mechanical Engineering}
+\adresafakulta{Technická 2896/2, 61669 Brno}
+
+\ustav{Ústav matematiky}
+\enustav{Institute of Mathematics}
+
+% udaje o autorovi
+
+\autor{}{Ondřej Sekáč}{}  % Jméno autora, 
+    % Tituly vložte samostatně, např. \autor{Ing.}{Petra Smékalová}{}
+\autorzkr{Sekáč, O.}
+  % bibliografické jméno
+
+\typstudia{B}
+  % M, N, B, D
+  % M - Magisterské, N - Navazující magisterské, B - Bakalářské, D-Doktorské
+  % U typu studia M a N se liší anglický název
+
+\nazev{Obecné rotační NURBS plochy} 
+  % Ručně můžete dlouhý text zalomit pomocí " \break "
+\ennazev{NURBS surface of revolution} 
+  % Ručně můžete dlouhý text zalomit pomocí " \break "
+
+%vedouci prace
+\vedouci{Mgr.}{Jana Procházková}{, Ph.D.}
+\citacevedouci{Vedoucí Mgr. Jana Procházková, Ph.D.} % Označení vedoucího práce pro citaci záv. práce. Musí být ukončeno tečkou.
+
+\datumobhajoby{neuvedeno}
+\abstrakt{\noindent Tato bakalářská práce se zabývá rotačními NURBS plochami. NURBS plochy jsou racionálním rozšířením B-spline ploch, což umožňuje zobrazení kružnic, a tedy anuloidu, kulové plochy a dalších rotačních ploch. Součástí této práce je programové zpracování vytváření NURBS rotačních ploch ve formě aplikace včetně popisu použitých algoritmů.} % Před "\n" vložit další "\n"
+\enabstrakt{\noindent The goal of this bachelor's thesis is to give an overview of NURBS surfaces of revolution. NURBS surfaces are rational B-spline surfaces, which allows for construction of circles, hence anuloid, sphere and other surfaces of revolution. The thesis also contains an application that can create NURBS surfaces of revolution and description of algorithms used.} % Před "\n" vložit další "\n"
+\klicovaslova{\noindent B-spline, NURBS, rotační plochy, De Boorův algoritmus} % Před "\n" vložit " \break"
+\enklicovaslova{\noindent B-spline, NURBS, surface of revolution, De Boor's algorithm} % Před "\n" vložit " \break"
+  
+%%
+%%   Konec generování údajů
+%%
+
+
+%%
+%%   Vlastní vysázení desek umístnit na začátek práce
+%%
+%\titul% vytiskne titul práce
+%\abstrakty% vytiskne stránku s abstrakty
